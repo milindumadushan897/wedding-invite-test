@@ -282,10 +282,10 @@
       <div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div>
     </div>
     <div class="timer reveal" id="timer">
-      <div class="timer-block"><span class="timer-num" id="t-days">20</span><p class="timer-label">Days</p></div>
-      <div class="timer-block"><span class="timer-num" id="t-hours">12</span><p class="timer-label">Hours</p></div>
-      <div class="timer-block"><span class="timer-num" id="t-mins">32</span><p class="timer-label">Minutes</p></div>
-      <div class="timer-block"><span class="timer-num" id="t-secs">56</span><p class="timer-label">Seconds</p></div>
+      <div class="timer-block"><span class="timer-num" id="t-days">00</span><p class="timer-label">Days</p></div>
+      <div class="timer-block"><span class="timer-num" id="t-hours">00</span><p class="timer-label">Hours</p></div>
+      <div class="timer-block"><span class="timer-num" id="t-mins">00</span><p class="timer-label">Minutes</p></div>
+      <div class="timer-block"><span class="timer-num" id="t-secs">00</span><p class="timer-label">Seconds</p></div>
     </div>
   </div>
 </section>
@@ -439,20 +439,25 @@
   img.onload = function() { bg.classList.add('loaded'); };
   img.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format';
 
-  // Countdown timer
-  function pad(n) { return String(n).padStart(2,'0'); }
-  function tick() {
-    var diff = new Date('2026-02-14T18:00:00') - new Date();
-    if (diff <= 0) {
-      document.getElementById('timer').innerHTML = '<p style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:28px;color:var(--gold-lt)">Today is the day!</p>';
-      return;
-    }
-    document.getElementById('t-days').textContent  = pad(Math.floor(diff/86400000));
-    document.getElementById('t-hours').textContent = pad(Math.floor(diff%86400000/3600000));
-    document.getElementById('t-mins').textContent  = pad(Math.floor(diff%3600000/60000));
-    document.getElementById('t-secs').textContent  = pad(Math.floor(diff%60000/1000));
-  }
-  tick(); setInterval(tick, 1000);
+  // Set your target date
+  const targetDate = new Date("Dec 31, 2026 23:59:59").getTime();
+
+  setInterval(function() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    // Calculate time calculations for days, hours, minutes and seconds
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Update the HTML elements
+    document.getElementById("t-days").innerText = days;
+    document.getElementById("t-hours").innerText = hours;
+    document.getElementById("t-mins").innerText = minutes;
+    document.getElementById("t-secs").innerText = seconds;
+  }, 1000);
 
   // Scroll reveal
   var io = new IntersectionObserver(function(entries) {
